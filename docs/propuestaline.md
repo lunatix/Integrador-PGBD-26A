@@ -1,27 +1,27 @@
 # Propuesta: Eficiencia recaudatoria y sostenibilidad fiscal en México frente al ciclo económico (COVID-19)
 
-## Pregunta analítica
+## 1.- Pregunta analítica
 ¿Cómo respondió la recaudación tributaria del SAT (ISR, IVA, IEPS) a los ciclos de la actividad económica (IGAE), en particular durante la caída y recuperación del COVID-19 (2020-2021), y qué implica esto para la sostenibilidad fiscal (SHCP)?
 
-### Objetivo
+### 2.- Objetivo
 Medir la eficiencia recaudatoria (recaudación real en relación con la actividad económica) y su sensibilidad al ciclo, comparando el periodo previo al COVID, el choque de 2020 y la recuperación posterior.
 
-### Variables necesarias
+### 3.- Variables necesarias
 - Recaudación tributaria por impuesto y mes (SAT)
 - Actividad económica mensual (IGAE)
 - Precios (INPC), para expresar la recaudación en términos reales
 - Ingresos, gasto y balance público (SHCP), para evaluar la sostenibilidad fiscal
 
-### Resultados esperados
+### 4.- Resultados esperados
 - Comparativa de la recaudación real vs. el IGAE por periodo (pre-COVID, choque, recuperación)
 - Indicador de eficiencia recaudatoria (recaudación real / IGAE) y su evolución mensual
 - Identificación de qué impuesto fue más sensible al ciclo (ISR vs. IVA vs. IEPS)
 - Rezagos entre la caída de la actividad y la caída de la recaudación
 - Lectura de sostenibilidad fiscal: cuánto del gasto público (SHCP) se cubrió con ingresos tributarios
 
-## Fuentes adicionales investigadas
+## 5.- Fuentes adicionales investigadas
 
-### Fuente 1 (seleccionada): Recaudación de ingresos tributarios (SAT, Datos Abiertos)
+### 6.- Fuente 1 (seleccionada): Recaudación de ingresos tributarios (SAT, Datos Abiertos)
 - **Institución:** Servicio de Administración Tributaria (SAT), publicada también en datos.gob.mx.
 - **Página oficial:** https://www.sat.gob.mx/minisitio/DatosAbiertos/index.html
 - **Conjunto de datos:** "Recaudación de ingresos tributarios del Gobierno Federal" en https://datos.gob.mx/busca/dataset/85368508-8f2e-4a55-9dcb-cf536742e498
@@ -31,7 +31,7 @@ Medir la eficiencia recaudatoria (recaudación real en relación con la activida
 - **Formato de acceso:** archivo descargable (CSV/Excel) [VERIFICAR tamaño]
 - **Relación con las fuentes base:** se une por mes con IGAE, INPC y SHCP.
 
-### Fuente 2: Puestos de trabajo afiliados al IMSS
+### 7.- Fuente 2: Puestos de trabajo afiliados al IMSS
 - **Institución:** Instituto Mexicano del Seguro Social (IMSS), Datos Abiertos.
 - **Página oficial:** http://datos.imss.gob.mx/
 - **Variables:** puestos de trabajo afiliados, salario base de cotización promedio, entidad federativa. [VERIFICAR columnas exactas]
@@ -40,12 +40,12 @@ Medir la eficiencia recaudatoria (recaudación real en relación con la activida
 - **Formato de acceso:** archivos descargables [VERIFICAR formato y tamaño]
 - **Relación con las fuentes base:** se une por mes con el IGAE (empleo y actividad) y con la recaudación del SAT, porque el ISR depende en buena medida del empleo formal.
 
-### Justificación de la fuente seleccionada
+### 8.- Justificación de la fuente seleccionada
 Se selecciona la del SAT porque mide directamente la variable de interés (recaudación tributaria por impuesto), mientras que la del IMSS explicaría solo uno de sus componentes (el ISR ligado al empleo formal). Además, el SAT permite construir el indicador de eficiencia recaudatoria frente al IGAE, que es el centro de la pregunta analítica. El empleo del IMSS queda como variable explicativa para una posible ampliación del análisis.
 
 Nota: la SHCP también publica ingresos tributarios, por lo que la fuente del SAT se justifica por su mayor detalle (por impuesto y, si existe, por entidad o tipo de contribuyente). Hay que confirmarlo al revisar el diccionario de datos.
 
-## Cómo encaja con las fuentes base
+## 9.- ¿Cómo encaja con las fuentes base?
 | Fuente | Unión |
 |---|---|
 | IGAE | mes (serie nacional de actividad económica) |
@@ -54,7 +54,7 @@ Nota: la SHCP también publica ingresos tributarios, por lo que la fuente del SA
 | SAT (seleccionada) | mes, recaudación por impuesto |
 | IMSS (opcional) | mes, empleo formal como variable explicativa |
 
-## Pipeline en PySpark (resumen)
+## 10.- Pipeline en PySpark (resumen)
 1. **Ingesta:** lectura de CSV con esquema explícito (Excel a CSV si hace falta).
 2. **Validación:** descartar registros sin fecha o con montos nulos o negativos inesperados; revisar duplicados.
 3. **Transformación:** estandarizar fechas a mes; convertir montos a numérico; deflactar con INPC (pesos constantes); crear variable de periodo (pre-COVID, choque, recuperación).
