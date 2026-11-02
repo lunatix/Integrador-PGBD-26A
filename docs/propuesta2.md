@@ -7,7 +7,8 @@
 - **Objetivo General:**
 Evaluar el impacto coordinado del gasto de la SHCP y la recaudación del SAT sobre la actividad económica (IGAE) y la inflación (INPC) mediante el procesamiento e integración de macrodatos con PySpark.
 - **Objetivos Específicos:** 
-Medir la correlación y el efecto rezagado del gasto público y la recaudación del ISR/IVA sobre el crecimiento del IGAE.Identificar si incrementos en la recaudación tributaria amortiguan o exacerban presiones inflacionarias derivadas del gasto del sector público.
+  1. Medir la correlación y el efecto rezagado del gasto público y la recaudación del ISR/IVA sobre el crecimiento del IGAE.
+  2. Identificar si incrementos en la recaudación tributaria amortiguan o exacerban presiones inflacionarias derivadas del gasto del sector público.
 
 ## Fuente Adicional: Servicio de Administración Tributaria (SAT)
 - **Institución y Enlace oficial:** Servicio de Administración Tributaria (SAT) / Datos Abiertos https://www.sat.gob.mx/minisitio/DatosAbiertos/recaudacion.html
