@@ -11,4 +11,4 @@ Revisión y validación.
 
 ## Documentation Lead
 Documentación y diagramas.
-- _Dimas Salgado Aline_
+- _Dimas Salgado Aline Yaremys_
