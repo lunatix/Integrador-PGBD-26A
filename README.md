@@ -2,7 +2,7 @@
 
 * Dimas Salgado Aline Yaremys
 * Romero Gálvez Roberto Alejandro
-* Díaz Mauricio
+* Díaz Aguila Mauricio Adrián 
 * Ruesga Rodriguez Gloria Viridana
 
 # Impacto de la política y el equilibrio fiscal sobre el crecimiento económico y la inflación en México (2015–2025)
