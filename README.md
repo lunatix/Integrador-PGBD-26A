@@ -5,7 +5,7 @@
 * Díaz Mauricio
 * Ruesga Rodriguez Gloria Viridana
 
-# IImpacto de la política y el equilibrio fiscal sobre el crecimiento económico y la inflación en México (2015–2025)
+# Impacto de la política y el equilibrio fiscal sobre el crecimiento económico y la inflación en México (2015–2025)
 
 ## Pregunta de investigación
 ¿De qué manera el equilibrio fiscal —medido a través de la relación entre el gasto presupuestario (SHCP) y la recaudación tributaria (SAT)— incide sobre el crecimiento de la actividad económica (IGAE) y la dinámica de precios (INPC) en México durante el periodo 2015–2025?
