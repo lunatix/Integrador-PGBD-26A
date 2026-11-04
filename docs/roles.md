@@ -3,10 +3,10 @@
 ## Developer
 Implementación.
 - _Ruesga Rodriguez Viridiana_
+- _Diaz Aguila Mauricio_
 
 ## Technical Reviewer
 Revisión y validación.
-- _Diaz Aguila Mauricio_
 - _Romero Galvez Roberto_
 
 ## Documentation Lead
