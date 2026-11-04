@@ -3,7 +3,7 @@
 * Dimas Salgado Aline Yaremys
 * Romero Gálvez Roberto Alejandro
 * Díaz Aguila Mauricio Adrián 
-* Ruesga Rodriguez Gloria Viridana
+* Ruesga Rodriguez Gloria Viridiana
 
 # Impacto de la política y el equilibrio fiscal sobre el crecimiento económico y la inflación en México (2015–2025)
 
@@ -25,3 +25,24 @@ Evaluar el impacto coordinado del gasto de la SHCP y la recaudación del SAT sob
 | **Recaudación Tributaria** | Explicativa (Fiscal - Ingresos) | **SAT** | Ingresos tributarios netos (desglose por ISR e IVA). | Mensual | 2015 – 2025|
 | **IGAE** | Dependiente (Producto) | **INEGI** | Índice Global de la Actividad Económica (Base 2018=100) | Mensual | 2015 – 2025 |
 | **INPC** | Dependiente (Precios) | **INEGI** | Índice Nacional de Precios al Consumidor (Variación interanual). | Mensual | 2015 – 2025 |
+
+## Resultados esperados
+- DataFrame maestro mensual (SHCP + SAT + IGAE + INPC) almacenado en Parquet.
+- Indicador de equilibrio fiscal mensual: gasto del Gobierno Federal / recaudación tributaria.
+- Correlaciones contemporáneas y rezagadas (1, 3, 6 y 12 meses) del indicador fiscal contra la variación anual del IGAE y del INPC.
+- Comparativo por periodos: prepandemia (2015–2019), pandemia (2020–2021) y pospandemia (2022–2025).
+
+## Roles (sesión inicial, rotan cada sesión)
+| Integrante | Rol |
+| :--- | :--- |
+| Ruesga Rodriguez Gloria Viridiana | Developer |
+| Díaz Aguila Mauricio Adrián | Developer |
+| Romero Gálvez Roberto Alejandro | Technical Reviewer |
+| Dimas Salgado Aline Yaremys | Documentation Lead |
+
+Detalle en [docs/roles.md](docs/roles.md).
+
+## Documentación
+- [docs/fuentes.md](docs/fuentes.md): fuentes investigadas y justificación.
+- [docs/arquitectura.md](docs/arquitectura.md): diagrama del pipeline y operaciones PySpark.
+- [docs/roles.md](docs/roles.md): organización, responsabilidades y decisiones.
