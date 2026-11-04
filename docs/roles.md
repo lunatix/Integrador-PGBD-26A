@@ -1,9 +1,14 @@
 # Control de roles
 
-*Developer (implementación)
+## Developer
+Implementación.
+- _Ruesga Rodriguez Viridiana_
 
+## Technical Reviewer
+Revisión y validación.
+- _Diaz Aguila Mauricio_
+- _Romero Galvez Roberto_
 
-*Technical Reviewer (revisión y validación) 
-
-
-*Documentation Lead (documentación y diagramas).
+## Documentation Lead
+Documentación y diagramas.
+- _Dimas Salgado Aline_
