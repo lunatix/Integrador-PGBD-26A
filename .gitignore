@@ -1,0 +1,30 @@
+# Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Datos: no se versionan (se documenta su origen en docs/fuentes.md)
+data/
+output/
+*.csv
+*.xls
+*.xlsx
+*.parquet
+*.zip
+
+# Credenciales y entorno
+.env
+*.key
+
+# SO / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
