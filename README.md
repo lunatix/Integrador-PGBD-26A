@@ -32,6 +32,17 @@ Evaluar el impacto coordinado del gasto de la SHCP y la recaudación del SAT sob
 - Correlaciones contemporáneas y rezagadas (1, 3, 6 y 12 meses) del indicador fiscal contra la variación anual del IGAE y del INPC.
 - Comparativo por periodos: prepandemia (2015–2019), pandemia (2020–2021) y pospandemia (2022–2025-03).
 
+## Estado actual del desarrollo
+| Etapa | Estado | Detalle |
+| :--- | :--- | :--- |
+| Definición del proyecto y fuentes | Completa | Pregunta, objetivos, fuentes y arquitectura documentados en `docs/`. |
+| Ingesta | Completa | [notebooks/01_ingesta.ipynb](notebooks/01_ingesta.ipynb) descarga SHCP, SAT, IGAE e INPC a `data/raw/` y verifica con PySpark esquema, volumen y cobertura. |
+| Periodo de estudio | Ajustado | 2015-01 a 2025-03: el IGAE de datos abiertos del INEGI no tiene meses posteriores. |
+| Transformación e integración | Pendiente | Llave `fecha` mensual, pivot de SHCP, homologación de unidades, IGAE de ancho a largo y join en el DataFrame maestro. |
+| Validaciones de calidad | Pendiente | Nulos, duplicados por fecha y meses faltantes. |
+| Análisis | Pendiente | Rezagos, correlaciones y comparativo por periodos. |
+| Guía de optimización | Pendiente | [docs/guia_optimizacion.md](docs/guia_optimizacion.md) creado, sin contenido. |
+
 ## Roles (sesión inicial, rotan cada sesión)
 | Integrante | Rol |
 | :--- | :--- |
