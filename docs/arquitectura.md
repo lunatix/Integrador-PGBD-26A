@@ -6,7 +6,7 @@
 flowchart TD
     A1[SHCP<br/>Ingresos y gastos GF<br/>Parquet/CSV] --> B
     A2[SAT<br/>Ingresos tributarios<br/>XLS] --> B
-    A3[INEGI IGAE<br/>XLSX] --> B
+    A3[INEGI IGAE<br/>CSV] --> B
     A4[INEGI INPC<br/>CSV] --> B
     B[Ingesta<br/>spark.read] --> C[Validación y limpieza<br/>esquema, tipos, nulos, rangos de fechas]
     C --> D[Transformación<br/>fecha mensual, pivot SHCP, unidades a millones,<br/>variación anual, ratio fiscal]
@@ -29,5 +29,5 @@ flowchart TD
 
 ## Relación entre fuentes
 - **Llave:** `fecha` = primer día del mes (`date`). Todas las fuentes son mensuales.
-- **Ventana común:** 2011-01 a 2026-07 (187 meses). El análisis se restringe a 2015–2025.
+- **Ventana común:** 2011-01 a 2025-03 (171 meses). El análisis se restringe a 2015-01 – 2025-03, porque el IGAE de datos abiertos termina en 2025-03.
 - **Riesgos:** las series son estacionales (el IGAE en niveles y la recaudación de abril con la declaración anual), por lo que se usan variaciones anuales. El INPC tiene base 2Q jul 2018 = 100 y se usa como índice. Las cifras más recientes del SAT son preliminares.

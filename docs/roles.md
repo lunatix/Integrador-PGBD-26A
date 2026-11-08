@@ -21,7 +21,7 @@
 | :--- | :--- |
 | Fuente adicional: SAT (recaudación) | Mide directamente la variable de la pregunta y su viabilidad está verificada (ver `fuentes.md`). |
 | Llave de integración: `fecha` mensual | Las cuatro fuentes son mensuales. |
-| Periodo 2015–2025 | La ventana común real es 2011–2026, así que el periodo cabe completo. |
+| Periodo 2015-01 a 2025-03 | El IGAE de datos abiertos (INEGI) solo llega a 2025-03; las demás fuentes llegan a 2026. |
 | Formato de almacenamiento: Parquet | Es columnar y comprimido, y se integra nativamente con Spark. |
 | No versionar datos | Lo pide la actividad; el origen de cada archivo queda documentado en `fuentes.md`. |
 

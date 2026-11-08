@@ -8,7 +8,7 @@ Fuentes base del curso: SHCP (ingresos y gastos del Gobierno Federal), INEGI INP
 - **Archivo:** [`IngresosTributarios.xls`](https://wu1agsprosta001.blob.core.windows.net/agsc-publicaciones/Datos_abiertos/Cifras_SAT/Documents/IngresosTributarios.xls)
 - **Variables** (millones de pesos, verificadas en el archivo): Año, Mes, Total de ingresos tributarios, ISR, IVA, IEPS (desglosado en gasolinas y diésel, tabacos, alcohol, cerveza, juegos y sorteos, telecomunicaciones, bebidas energetizantes, bebidas saborizadas, alimentos de alta densidad calórica, plaguicidas, carbono), Importaciones, Exportaciones, ISAN, Impuesto por exploración y extracción de hidrocarburos y Otros.
 - **Periodicidad:** mensual.
-- **Cobertura temporal:** enero de 2010 a agosto de 2026 (200 meses; las cifras más recientes son preliminares). Cubre el periodo de estudio 2015–2025.
+- **Cobertura temporal:** enero de 2010 a agosto de 2026 (200 meses; las cifras más recientes son preliminares). Cubre el periodo de estudio (2015-01 a 2025-03).
 - **Formato de acceso:** descarga directa en Excel 97 (`.xls`, alrededor de 150 KB). Sin API ni registro.
 - **Calidad observada:** encabezados en dos filas (filas 5 y 6), notas al pie al final del archivo, meses escritos como texto ("Enero") y algunos valores negativos de IEPS en gasolinas (reflejan estímulos fiscales, no son errores).
 - **Relación con las fuentes base:** se une por mes (`fecha` = primer día del mes) con SHCP, IGAE e INPC.
@@ -31,11 +31,11 @@ Fuentes base del curso: SHCP (ingresos y gastos del Gobierno Federal), INEGI INP
 | :--- | :--- | :--- | :--- |
 | SHCP (gasto total, clave XBC) | 2011-01 | 2026-07 | 187 |
 | SAT (recaudación) | 2010-01 | 2026-08 | 200 |
-| IGAE (serie "Total") | 1993-01 | 2026-07 | 403 |
+| IGAE (serie "Total", datos abiertos) | 1993-01 | 2025-03 | 387 |
 | INPC | 2003-01 | 2026-08 | 284 |
-| **Maestro (inner join por mes)** | **2011-01** | **2026-07** | **187** |
+| **Maestro (inner join por mes)** | **2011-01** | **2025-03** | **171** |
 
-La intersección cubre por completo el periodo 2015–2025. La correlación preliminar del ratio fiscal contra la variación anual del IGAE es de 0.08 (0.11 con rezago de 3 meses). Es baja, lo que indica que habrá que trabajar con rezagos y con desestacionalización.
+La intersección cubre por completo el periodo de estudio (2015-01 a 2025-03). La correlación preliminar del ratio fiscal contra la variación anual del IGAE es de 0.08 (0.11 con rezago de 3 meses). Es baja, lo que indica que habrá que trabajar con rezagos y con desestacionalización.
 
 El empleo del IMSS queda como variable explicativa para una posible ampliación del análisis.
 
