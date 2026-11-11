@@ -11,7 +11,7 @@ flowchart TD
     B[Ingesta<br/>spark.read] --> C[Validación y limpieza<br/>esquema, tipos, nulos, rangos de fechas]
     C --> D[Transformación<br/>fecha mensual, pivot SHCP, unidades a millones,<br/>variación anual, ratio fiscal]
     D --> E[Integración<br/>join por fecha → DataFrame maestro]
-    E --> F[Almacenamiento<br/>Parquet particionado por anio]
+    E --> F[Almacenamiento<br/>Parquet particionado por año]
     F --> G[Análisis<br/>rezagos, correlaciones, agregados por periodo]
 ```
 
