@@ -41,7 +41,7 @@ Evaluar cómo afectan de forma conjunta el gasto del gobierno y la recaudación 
 | Transformación e integración | Pendiente | Llave `fecha` mensual, pivot de SHCP, homologación de unidades, IGAE de ancho a largo y join en el DataFrame maestro. |
 | Validaciones de calidad | Pendiente | Nulos, duplicados por fecha y meses faltantes. |
 | Análisis | Pendiente | Rezagos, correlaciones y comparativo por periodos. |
-| Guía de optimización | Pendiente | [docs/guia_optimizacion.md](docs/guia_optimizacion.md) creado, sin contenido. |
+| Guía de optimización | Documento de consulta | [docs/guia_optimizacion.md](docs/guia_optimizacion.md) creado, sirve para mejorar los pipelines del proyecto y se actualizará conforme a la implementación |
 
 ## Documentación
 - [docs/fuentes.md](docs/fuentes.md): fuentes investigadas y justificación.
