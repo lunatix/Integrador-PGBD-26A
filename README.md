@@ -1,22 +1,22 @@
 # INTEGRANTES
 
+* Díaz Aguila Mauricio Adrián
 * Dimas Salgado Aline Yaremys
 * Romero Gálvez Roberto Alejandro
-* Díaz Aguila Mauricio Adrián 
 * Ruesga Rodriguez Gloria Viridiana
 
-# Impacto de la política y el equilibrio fiscal sobre el crecimiento económico y la inflación en México (2015–2025-03)
+# Impacto del gasto del gobierno y el cobro de impuestos en la economía y la inflación en México (2015–2025)
 
 ## Pregunta de investigación
-¿De qué manera el equilibrio fiscal —medido a través de la relación entre el gasto presupuestario (SHCP) y la recaudación tributaria (SAT)— incide sobre el crecimiento de la actividad económica (IGAE) y la dinámica de precios (INPC) en México durante el periodo de enero de 2015 a marzo de 2025?
+¿De qué manera influye la relación entre el dinero que gasta el gobierno (Secretaría de Hacienda) y lo que cobra en impuestos (SAT) en el crecimiento económico y en la subida de precios (inflación) en México, durante el periodo de enero de 2015 a marzo de 2025?
 
 ## Objetivo
 - **Objetivo General:**
-Evaluar el impacto coordinado del gasto de la SHCP y la recaudación del SAT sobre la actividad económica (IGAE) y la inflación (INPC) mediante el procesamiento e integración de macrodatos con PySpark.
+Evaluar cómo afectan de forma conjunta el gasto del gobierno y la recaudación de impuestos al crecimiento de la economía y al aumento del costo de vida en México, analizando grandes volúmenes de información mediante la herramienta PySpark.
 - **Objetivos Específicos:** 
-  1. Medir la correlación y el efecto rezagado del gasto público y la recaudación del ISR/IVA sobre el crecimiento del IGAE.
-  2. Identificar si incrementos en la recaudación tributaria amortiguan o exacerban presiones inflacionarias derivadas del gasto del sector público.
-
+  1. Identificar qué tan conectados están el gasto público y los impuestos principales (como ISR e IVA) con el crecimiento económico del país, y cuánto tiempo tarda en verse su impacto.
+  2. Descubrir si aumentar el cobro de impuestos ayuda a frenar la subida de precios provocada por el gasto del gobierno o si, por el contrario, la empeora.
+ 
 ## Variables por instancia a considerar 
 
 | Variable | Tipo de Variable | Fuente | Indicador / Definición | Periodicidad | Cobertura Temporal |
@@ -42,16 +42,6 @@ Evaluar el impacto coordinado del gasto de la SHCP y la recaudación del SAT sob
 | Validaciones de calidad | Pendiente | Nulos, duplicados por fecha y meses faltantes. |
 | Análisis | Pendiente | Rezagos, correlaciones y comparativo por periodos. |
 | Guía de optimización | Pendiente | [docs/guia_optimizacion.md](docs/guia_optimizacion.md) creado, sin contenido. |
-
-## Roles (sesión inicial, rotan cada sesión)
-| Integrante | Rol |
-| :--- | :--- |
-| Ruesga Rodriguez Gloria Viridiana | Developer |
-| Díaz Aguila Mauricio Adrián | Developer |
-| Romero Gálvez Roberto Alejandro | Technical Reviewer |
-| Dimas Salgado Aline Yaremys | Documentation Lead |
-
-Detalle en [docs/roles.md](docs/roles.md).
 
 ## Documentación
 - [docs/fuentes.md](docs/fuentes.md): fuentes investigadas y justificación.
