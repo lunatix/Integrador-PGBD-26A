@@ -1,0 +1,27 @@
+============================================================
+EJECUCIÓN PIPELINE MODULAR - ACTIVIDAD 11
+============================================================
+
+1. EXTRACCIÓN (Fuentes crudas en data/raw/)
+   - shcp :   746,676 filas leídas
+   - sat  :       201 filas leídas
+   - igae :       120 filas leídas
+   - inpc :     2,002 filas leídas
+
+2. LIMPIEZA Y HOMOLOGACIÓN
+   - Llave común `fecha` (primer día de mes, tipo date)
+   - SHCP filtrado por claves XBC, deduplicado de registros idénticos (2018-2025) y convertido de miles a millones (/1000)
+   - SAT limpio de marcas preliminares (*)
+   - IGAE transformado de formato ancho a largo (serie total base 2018=100)
+
+3. VALIDACIÓN DE CALIDAD (Ventana 2015-01-01 a 2025-03-01)
+   - shcp : 3567 filas | 123 meses únicos | 2015-01-01 a 2025-03-01
+   - sat  :  123 filas | 123 meses únicos | 2015-01-01 a 2025-03-01
+   - igae :  123 filas | 123 meses únicos | 2015-01-01 a 2025-03-01
+   - inpc :  123 filas | 123 meses únicos | 2015-01-01 a 2025-03-01
+
+4. INTEGRACIÓN Y TRANSFORMACIÓN ANALÍTICA
+   - DataFrame maestro: 123 filas x 43 columnas | Granularidad: 1 fila = 1 mes (2015-01-01 a 2025-03-01)
+
+5. ALMACENAMIENTO Y VERIFICACIÓN DE RELECTURA
+   - Salida verificada en: data\processed\dataset_maestro.parquet

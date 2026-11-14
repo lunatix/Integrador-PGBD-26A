@@ -1,0 +1,1 @@
+"""Módulo de reglas de validación y calidad de datos."""
