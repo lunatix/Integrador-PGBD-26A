@@ -1,3 +1,10 @@
+# INTEGRANTES
+
+* Díaz Aguila Mauricio Adrián
+* Dimas Salgado Aline Yaremys
+* Romero Gálvez Roberto Alejandro
+* Ruesga Rodriguez Gloria Viridiana
+
 # Proyecto Integrador — Pipeline Modular en PySpark (Actividad 11)
 
 Pipeline de procesamiento de datos macroeconómicos y fiscales de México desarrollado en **PySpark** bajo una arquitectura modular reproducible. Integra series mensuales de gasto público (**SHCP**), recaudación tributaria (**SAT**), actividad económica (**INEGI - IGAE**) e inflación (**INEGI - INPC**) para el periodo **enero de 2015 a marzo de 2025** (123 meses).
@@ -146,7 +153,9 @@ El registro completo generado automáticamente por el pipeline se encuentra en [
 * Romero Gálvez Roberto Alejandro
 * Ruesga Rodriguez Gloria Viridiana
 
-# Impacto del gasto del gobierno y el cobro de impuestos en la economía y la inflación en México (2015–2025)
+# Clase 10 - Optimización de Pipelines en PySpark
+
+## Impacto del gasto del gobierno y el cobro de impuestos en la economía y la inflación en México (2015–2025)
 
 ## Pregunta de investigación
 ¿De qué manera influye la relación entre el dinero que gasta el gobierno (Secretaría de Hacienda) y lo que cobra en impuestos (SAT) en el crecimiento económico y en la subida de precios (inflación) en México, durante el periodo de enero de 2015 a marzo de 2025?
