@@ -9,15 +9,19 @@
 #   4. Integración       -> src.transformations.integrate
 #   5. Carga y relectura -> src.transformations.integrate
 #
-# Uso desde la raíz del repositorio:
+# Para correr:
 #   python -m src.pipeline
 # ============================================================
 
-from src.ingestion.loader import get_spark, extract_sources, REPORTS_DIR
-from src.transformations.clean import clean_all
-from src.quality.validators import validate_raw, validate_clean_sources, validate_master
-from src.transformations.integrate import build_master_dataset, save_and_verify_parquet
-
+from src.ingestion.loader           import get_spark
+from src.ingestion.loader           import extract_sources
+from src.ingestion.loader           import REPORTS_DIR
+from src.transformations.clean      import clean_all
+from src.quality.validators         import validate_raw 
+from src.quality.validators         import validate_clean_sources 
+from src.quality.validators         import validate_master
+from src.transformations.integrate  import build_master_dataset
+from src.transpormation.integrate   import save_and_verify_parquet
 
 def run() -> None:
     spark = get_spark()
@@ -74,8 +78,14 @@ def run() -> None:
         print("\n=== ESQUEMA FINAL Y MUESTRA DE RESULTADOS ===")
         df_maestro.printSchema()
         df_maestro.select(
-            "fecha", "anio", "shcp_xbc", "sat_total_tributarios",
-            "ratio_tributario_gasto", "igae_total", "inpc", "igae_var_anual_pct"
+            "fecha",
+            "anio",
+            "shcp_xbc",
+            "sat_total_tributarios",
+            "ratio_tributario_gasto",
+            "igae_total",
+            "inpc",
+            "igae_var_anual_pct"
         ).show(5, truncate=False)
     finally:
         spark.stop()
@@ -83,3 +93,4 @@ def run() -> None:
 
 if __name__ == "__main__":
     run()
+
