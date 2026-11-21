@@ -52,10 +52,10 @@ def validate_clean_sources(clean_dfs: dict[str, DataFrame]) -> dict[str, dict]:
     for nombre, df in clean_dfs.items():
         sub = df.filter(F.col("fecha").between(FECHA_INICIO, FECHA_FIN))
 
-        # Comprobar ausencia de nulos en todas las columnas
-        for c in sub.columns:
-            n_null = sub.filter(F.col(c).isNull()).count()
-            assert n_null == 0, f"[VALIDACIÓN CLEAN] '{nombre}' tiene {n_null} nulos en '{c}'."
+        # Comprobar ausencia de nulos en todas las columnas (un solo job)
+        nulos = sub.agg(*[F.count_if(F.col(c).isNull()).alias(c) for c in sub.columns]).first().asDict()
+        con_nulos = {c: n for c, n in nulos.items() if n}
+        assert not con_nulos, f"[VALIDACIÓN CLEAN] '{nombre}' tiene nulos: {con_nulos}."
 
         # Comprobar rango temporal mínimo y máximo
         rango = sub.agg(F.min("fecha").alias("min_f"), F.max("fecha").alias("max_f")).first()
