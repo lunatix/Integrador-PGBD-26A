@@ -9,6 +9,7 @@ venv/
 spark-warehouse/
 metastore_db/
 derby.log
+spark-events/
 
 # Datos: no se versionan (se documenta su origen en docs/fuentes.md)
 data/

@@ -1,27 +1,28 @@
 ============================================================
-EJECUCIÓN PIPELINE MODULAR - ACTIVIDAD 11
+EJECUCIÓN PIPELINE MEDALLION - ACTIVIDAD 11
 ============================================================
+Configuración Spark: master=local[*] | executors (procesos JVM)=1 | slots de tarea (núcleos)=12 | memoria unificada Spark (MB)=456 | spark.driver.memory=1g (por defecto) | spark.sql.shuffle.partitions=4 | spark.sql.adaptive.enabled=true | spark.sql.files.maxPartitionBytes=134217728b
 
-1. EXTRACCIÓN (Fuentes crudas en data/raw/)
-   - shcp :   746,676 filas leídas
-   - sat  :       201 filas leídas
-   - igae :       120 filas leídas
-   - inpc :     2,002 filas leídas
+1. BRONZE (data/raw -> data/bronze, Parquet sin transformar)
+   - shcp :   746,676 filas
+   - sat  :       201 filas
+   - igae :       120 filas
+   - inpc :     2,002 filas
+   Spark: 20 jobs | 42 tareas | lee 228.79 MB | escribe 4.83 MB | shuffle 0.9 KB | 58.47 s de tareas
 
-2. LIMPIEZA Y HOMOLOGACIÓN
+2. SILVER (limpieza, homologación y validación de calidad)
    - Llave común `fecha` (primer día de mes, tipo date)
    - SHCP filtrado por claves XBC, deduplicado de registros idénticos (2018-2025) y convertido de miles a millones (/1000)
    - SAT limpio de marcas preliminares (*)
    - IGAE transformado de formato ancho a largo (serie total base 2018=100)
-
-3. VALIDACIÓN DE CALIDAD (Ventana 2015-01-01 a 2025-03-01)
+   Validación en ventana 2015-01-01 a 2025-03-01:
    - shcp : 3567 filas | 123 meses únicos | 2015-01-01 a 2025-03-01
    - sat  :  123 filas | 123 meses únicos | 2015-01-01 a 2025-03-01
    - igae :  123 filas | 123 meses únicos | 2015-01-01 a 2025-03-01
    - inpc :  123 filas | 123 meses únicos | 2015-01-01 a 2025-03-01
+   Spark: 61 jobs | 72 tareas | lee 6.42 MB | escribe 0.07 MB | shuffle 181.5 KB | 12.08 s de tareas
 
-4. INTEGRACIÓN Y TRANSFORMACIÓN ANALÍTICA
+3. GOLD (dataset maestro analítico)
    - DataFrame maestro: 123 filas x 43 columnas | Granularidad: 1 fila = 1 mes (2015-01-01 a 2025-03-01)
-
-5. ALMACENAMIENTO Y VERIFICACIÓN DE RELECTURA
-   - Salida verificada en: data\processed\dataset_maestro.parquet
+   - Salida verificada en: data/gold/dataset_maestro
+   Spark: 40 jobs | 50 tareas | lee 0.53 MB | escribe 0.17 MB | shuffle 163.8 KB | 2.1 s de tareas

@@ -49,11 +49,9 @@ def _clean_double(col_name: str):
 # ============================================================
 def clean_shcp(df: DataFrame, prefijo_clave: str = "XBC") -> DataFrame:
     mes_num = _mes_map()
-    base = df
 
     # Conservar únicamente cifras mensuales (evita mezclar acumulados)
-    if "FRECUENCIA" in df.columns:
-        base = base.filter(F.trim(F.col("FRECUENCIA")) == "Mensual")
+    base = df.filter(F.trim(F.col("FRECUENCIA")) == "Mensual")
 
     # Filtrar conceptos presupuestarios XBC (Gasto del Gobierno Federal)
     base = base.filter(F.col("CLAVE_DE_CONCEPTO").startswith(prefijo_clave))
