@@ -1,4 +1,19 @@
-# Arquitectura inicial del pipeline
+# Arquitectura del pipeline
+
+## Arquitectura implementada: medallion
+
+| Capa | Carpeta | Contenido | Código |
+| :--- | :--- | :--- | :--- |
+| Raw | `data/raw/` | Archivos tal como se descargan | `notebooks/01_ingesta.ipynb` |
+| Bronze | `data/bronze/<fuente>` | Mismas filas y columnas en Parquet + `_archivo_origen`, `_fecha_ingesta` | `capa_bronze()` en `src/pipeline.py` |
+| Silver | `data/silver/<fuente>` | Una tabla limpia por fuente con llave `fecha`, validada sobre lo escrito | `capa_silver()` |
+| Gold | `data/gold/dataset_maestro` | Dataset maestro (1 fila = 1 mes), particionado por año | `capa_gold()` |
+
+Cada capa se materializa en Parquet, así que el CSV de SHCP (225 MB) se lee una sola vez y las capas siguientes se reprocesan desde Parquet. Las métricas de Spark por capa están en `reports/evidencia_ejecucion_act11.txt`; la justificación de la configuración, en `guia_optimizacion.md`.
+
+---
+
+# Diseño inicial (sesión 1)
 
 ## Diagrama del flujo de datos
 
@@ -29,5 +44,5 @@ flowchart TD
 
 ## Relación entre fuentes
 - **Llave:** `fecha` = primer día del mes (`date`). Todas las fuentes son mensuales.
-- **Ventana común:** 2011-01 a 2025-03 (171 meses). El análisis se restringe a 2015-01 – 2025-03, porque el IGAE de datos abiertos termina en 2025-03.
+- **Ventana común:** 2011-01 a 2025-03 (171 meses). El análisis se restringe a 2015-01 – 2025-03. El fin se debe a que el IGAE de datos abiertos termina en 2025-03. Inicia en 2015 porque los datos existen desde 2011-01 (límite de SHCP), pero la Reforma Hacendaria de 2014 cambió el régimen de recaudación: el IEPS fue negativo en 2011-2013 por el subsidio a gasolinas y la recaudación total creció 31 % en 2015. Desde 2015 todas las variaciones anuales comparan meses bajo el mismo régimen fiscal, así que el salto de la reforma no se confunde con efectos de los impuestos sobre el IGAE o la inflación.
 - **Riesgos:** las series son estacionales (el IGAE en niveles y la recaudación de abril con la declaración anual), por lo que se usan variaciones anuales. El INPC tiene base 2Q jul 2018 = 100 y se usa como índice. Las cifras más recientes del SAT son preliminares.

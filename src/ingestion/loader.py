@@ -40,6 +40,9 @@ EVENTOS_DIR = ROOT_DIR / "spark-events"  # event log para revisar la Spark UI en
 
 # Ventana común de estudio: enero 2015 a marzo 2025 (123 meses).
 # Se corta en 2025-03 porque hasta esa fecha llega el IGAE abierto.
+# Inicia en 2015 (aunque SHCP llega a 2011) para dejar fuera la Reforma
+# Hacendaria de 2014: el IEPS fue negativo en 2011-2013 y la recaudación
+# creció 31 % en 2015, un salto de régimen y no de actividad económica.
 FECHA_INICIO = "2015-01-01"
 FECHA_FIN = "2025-03-01"
 MESES_ESPERADOS = 123
