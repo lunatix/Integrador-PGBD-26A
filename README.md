@@ -40,16 +40,12 @@ Integrador-PGBD-26A/
 ├── reports/
 │   └── evidencia_ejecucion_act11.txt   # Registro de conteos, validaciones y métricas de ejecución
 ├── src/
-│   ├── __init__.py
 │   ├── pipeline.py                   # Orquestador ejecutable de principio a fin
 │   ├── ingestion/
-│   │   ├── __init__.py
 │   │   └── loader.py                 # Sesión de Spark, validación de rutas y esquemas explícitos
 │   ├── quality/
-│   │   ├── __init__.py
 │   │   └── validators.py             # Controles de nulos, duplicados por llave y continuidad temporal
 │   └── transformations/
-│       ├── __init__.py
 │       ├── clean.py                  # Llave común `fecha`, deduplicación SHCP y homologación monetaria
 │       └── integrate.py              # Pivot SHCP, joins broadcast, ventanas YoY y escritura Parquet
 ├── .gitignore
