@@ -10,7 +10,7 @@
 #   5. Carga y relectura -> src.transformations.integrate
 #
 # Uso desde la raíz del repositorio:
-#   python -m src.pipeline
+#   py -m src.pipeline
 # ============================================================
 
 from src.ingestion.loader import get_spark, extract_sources, REPORTS_DIR
