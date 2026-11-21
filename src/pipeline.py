@@ -1,79 +1,110 @@
 # ============================================================
-# PIPELINE MODULAR INTEGRADO (src/pipeline.py)
+# PIPELINE MEDALLION (src/pipeline.py)
 # ============================================================
 #
-# Ejecuta de principio a fin las etapas de la Actividad 11:
-#   1. Extracción        -> src.ingestion.loader
-#   2. Limpieza          -> src.transformations.clean
-#   3. Validación        -> src.quality.validators
-#   4. Integración       -> src.transformations.integrate
-#   5. Carga y relectura -> src.transformations.integrate
+# Ejecuta de principio a fin la arquitectura medallion:
+#   BRONZE -> CSV crudos a Parquet sin transformar  (src.ingestion.loader)
+#   SILVER -> limpieza y validación por fuente      (src.transformations.clean, src.quality.validators)
+#   GOLD   -> dataset maestro analítico             (src.transformations.integrate)
+#
+# Cada capa se etiqueta en la Spark UI y sus métricas (jobs, tareas,
+# MB leídos/escritos, shuffle) quedan en reports/evidencia_ejecucion_act11.txt.
+# notebooks/01_ingesta.ipynb llama a estas mismas funciones capa por
+# capa para mostrar el plan físico de Spark en cada paso.
 #
 # Uso desde la raíz del repositorio:
-#   py -m src.pipeline
+#   python -m src.pipeline
 # ============================================================
 
-from src.ingestion.loader import get_spark, extract_sources, REPORTS_DIR
+from pyspark.sql import SparkSession, DataFrame
+from src.ingestion.loader import (
+    get_spark, extract_sources, to_bronze, write_layer, read_layer,
+    BRONZE_DIR, SILVER_DIR, REPORTS_DIR,
+)
 from src.transformations.clean import clean_all
 from src.quality.validators import validate_raw, validate_clean_sources, validate_master
 from src.transformations.integrate import build_master_dataset, save_and_verify_parquet
+from src.monitoring import etapa, metricas, entorno
+
+
+def capa_bronze(spark: SparkSession) -> dict[str, int]:
+    """CSV crudos -> data/bronze (una lectura del CSV de SHCP). Devuelve filas por fuente."""
+    etapa(spark, "bronze")
+    write_layer(to_bronze(extract_sources(spark)), BRONZE_DIR)
+    return validate_raw(read_layer(spark, BRONZE_DIR))
+
+
+def capa_silver(spark: SparkSession) -> tuple[dict[str, DataFrame], dict[str, dict]]:
+    """data/bronze -> limpieza -> data/silver -> validación de calidad sobre lo escrito."""
+    etapa(spark, "silver")
+    write_layer(clean_all(read_layer(spark, BRONZE_DIR)), SILVER_DIR)
+    silver = read_layer(spark, SILVER_DIR)
+    return silver, validate_clean_sources(silver)
+
+
+def capa_gold(spark: SparkSession, silver: dict[str, DataFrame]) -> tuple[DataFrame, dict, object]:
+    """data/silver -> dataset maestro -> data/gold (Parquet particionado por año)."""
+    etapa(spark, "gold")
+    maestro = build_master_dataset(silver)
+    reporte = validate_master(maestro)
+    return maestro, reporte, save_and_verify_parquet(spark, maestro)
 
 
 def run() -> None:
     spark = get_spark()
-    lineas_reporte = []
+    lineas = []
 
     def log(msg: str = "") -> None:
         print(msg)
-        lineas_reporte.append(msg)
+        lineas.append(msg)
+
+    def log_spark(capa: str) -> None:
+        m = metricas(spark, capa)
+        log(
+            f"   Spark: {m['jobs']} jobs | {m['tareas']} tareas | lee {m['lectura_MB']} MB | "
+            f"escribe {m['escritura_MB']} MB | shuffle {m['shuffle_KB']} KB | {m['tiempo_tareas_s']} s de tareas"
+        )
 
     try:
         log("============================================================")
-        log("EJECUCIÓN PIPELINE MODULAR - ACTIVIDAD 11")
+        log("EJECUCIÓN PIPELINE MEDALLION - ACTIVIDAD 11")
         log("============================================================")
+        log("Configuración Spark: " + " | ".join(f"{k}={v}" for k, v in entorno(spark).items() if k != "Spark UI"))
 
-        log("\n1. EXTRACCIÓN (Fuentes crudas en data/raw/)")
-        raw_dfs = extract_sources(spark)
-        conteos_raw = validate_raw(raw_dfs)
-        for fuente, n in conteos_raw.items():
-            log(f"   - {fuente:5}: {n:>9,} filas leídas")
+        log("\n1. BRONZE (data/raw -> data/bronze, Parquet sin transformar)")
+        for fuente, n in capa_bronze(spark).items():
+            log(f"   - {fuente:5}: {n:>9,} filas")
+        log_spark("bronze")
 
-        log("\n2. LIMPIEZA Y HOMOLOGACIÓN")
+        log("\n2. SILVER (limpieza, homologación y validación de calidad)")
         log("   - Llave común `fecha` (primer día de mes, tipo date)")
         log("   - SHCP filtrado por claves XBC, deduplicado de registros idénticos (2018-2025) y convertido de miles a millones (/1000)")
         log("   - SAT limpio de marcas preliminares (*)")
         log("   - IGAE transformado de formato ancho a largo (serie total base 2018=100)")
-        clean_dfs = clean_all(raw_dfs)
-
-        log("\n3. VALIDACIÓN DE CALIDAD (Ventana 2015-01-01 a 2025-03-01)")
-        rep_clean = validate_clean_sources(clean_dfs)
-        for fuente, info in rep_clean.items():
+        silver, rep_silver = capa_silver(spark)
+        log("   Validación en ventana 2015-01-01 a 2025-03-01:")
+        for fuente, info in rep_silver.items():
             log(
                 f"   - {fuente:5}: {info['filas_ventana']:>4} filas | "
                 f"{info['meses_unicos']} meses únicos | {info['rango']}"
             )
+        log_spark("silver")
 
-        log("\n4. INTEGRACIÓN Y TRANSFORMACIÓN ANALÍTICA")
-        df_maestro = build_master_dataset(clean_dfs)
-        rep_master = validate_master(df_maestro)
+        log("\n3. GOLD (dataset maestro analítico)")
+        maestro, rep_gold, ruta = capa_gold(spark, silver)
         log(
-            f"   - DataFrame maestro: {rep_master['filas']} filas x {rep_master['columnas']} columnas "
-            f"| Granularidad: 1 fila = 1 mes ({rep_master['rango']})"
+            f"   - DataFrame maestro: {rep_gold['filas']} filas x {rep_gold['columnas']} columnas "
+            f"| Granularidad: 1 fila = 1 mes ({rep_gold['rango']})"
         )
+        log(f"   - Salida verificada en: {ruta.relative_to(ruta.parents[2])}")
+        log_spark("gold")
 
-        log("\n5. ALMACENAMIENTO Y VERIFICACIÓN DE RELECTURA")
-        ruta_salida = save_and_verify_parquet(spark, df_maestro)
-        log(f"   - Salida verificada en: {ruta_salida.relative_to(ruta_salida.parents[2])}")
-
-        # Guardar evidencia breve en reports/ para documentación en GitHub
         REPORTS_DIR.mkdir(parents=True, exist_ok=True)
-        (REPORTS_DIR / "evidencia_ejecucion_act11.txt").write_text(
-            "\n".join(lineas_reporte), encoding="utf-8"
-        )
+        (REPORTS_DIR / "evidencia_ejecucion_act11.txt").write_text("\n".join(lineas), encoding="utf-8")
 
         print("\n=== ESQUEMA FINAL Y MUESTRA DE RESULTADOS ===")
-        df_maestro.printSchema()
-        df_maestro.select(
+        maestro.printSchema()
+        maestro.select(
             "fecha", "anio", "shcp_xbc", "sat_total_tributarios",
             "ratio_tributario_gasto", "igae_total", "inpc", "igae_var_anual_pct"
         ).show(5, truncate=False)

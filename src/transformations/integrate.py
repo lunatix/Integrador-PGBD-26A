@@ -1,5 +1,5 @@
 # ============================================================
-# MÓDULO DE INTEGRACIÓN Y CARGA (src/transformations/integrate.py)
+# MÓDULO DE INTEGRACIÓN Y CAPA GOLD (src/transformations/integrate.py)
 # ============================================================
 #
 # Construye el DataFrame maestro analítico con granularidad
@@ -17,7 +17,7 @@
 from pathlib import Path
 from pyspark.sql import SparkSession, DataFrame, Window
 from pyspark.sql import functions as F
-from src.ingestion.loader import FECHA_INICIO, FECHA_FIN, PROCESSED_DIR
+from src.ingestion.loader import FECHA_INICIO, FECHA_FIN, GOLD_DIR
 
 
 # ============================================================
@@ -96,8 +96,8 @@ def build_master_dataset(clean_dfs: dict[str, DataFrame]) -> DataFrame:
 def save_and_verify_parquet(
     spark: SparkSession,
     df: DataFrame,
-    output_dir: Path = PROCESSED_DIR,
-    dataset_name: str = "dataset_maestro.parquet",
+    output_dir: Path = GOLD_DIR,
+    dataset_name: str = "dataset_maestro",
 ) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
     destino = output_dir / dataset_name

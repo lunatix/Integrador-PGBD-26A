@@ -1,9 +1,14 @@
 # ============================================================
-# MÓDULO DE INGESTA / EXTRACCIÓN (src/ingestion/loader.py)
+# MÓDULO DE INGESTA / CAPA BRONZE (src/ingestion/loader.py)
 # ============================================================
 #
 # Lee las cuatro fuentes crudas descargadas previamente por
-# `notebooks/01_ingesta.ipynb` en `data/raw/`.
+# `notebooks/01_ingesta.ipynb` en `data/raw/` y define las rutas
+# de la arquitectura medallion:
+#   data/raw     archivos tal como se descargan (CSV)
+#   data/bronze  mismas filas y columnas, en Parquet, con metadatos de ingesta
+#   data/silver  una tabla limpia y validada por fuente
+#   data/gold    dataset maestro analítico (1 fila = 1 mes)
 #
 # Decisiones técnicas:
 # - Configura `PYSPARK_PYTHON` y `PYSPARK_DRIVER_PYTHON` con
@@ -17,6 +22,7 @@ import os
 import sys
 from pathlib import Path
 from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql import functions as F
 from pyspark.sql.types import (
     StructType, StructField, IntegerType, StringType, DoubleType, TimestampType
 )
@@ -26,8 +32,11 @@ from pyspark.sql.types import (
 # ============================================================
 ROOT_DIR = Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT_DIR / "data" / "raw"
-PROCESSED_DIR = ROOT_DIR / "data" / "processed"
+BRONZE_DIR = ROOT_DIR / "data" / "bronze"
+SILVER_DIR = ROOT_DIR / "data" / "silver"
+GOLD_DIR = ROOT_DIR / "data" / "gold"
 REPORTS_DIR = ROOT_DIR / "reports"
+EVENTOS_DIR = ROOT_DIR / "spark-events"  # event log para revisar la Spark UI en el History Server
 
 # Ventana común de estudio: enero 2015 a marzo 2025 (123 meses).
 # Se corta en 2025-03 porque hasta esa fecha llega el IGAE abierto.
@@ -72,14 +81,18 @@ SCHEMA_INPC = StructType([
 # 3. SESIÓN DE SPARK Y LECTURA DE FUENTES
 # ============================================================
 def get_spark(app_name: str = "Integrador_PGBD_Act11") -> SparkSession:
-    """Inicializa la sesión local de PySpark con 4 particiones de shuffle."""
+    """Sesión local de PySpark. La justificación medida de cada valor
+    (núcleos, particiones de shuffle, memoria) está en docs/guia_optimizacion.md."""
     os.environ["PYSPARK_PYTHON"] = sys.executable
     os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
+    EVENTOS_DIR.mkdir(exist_ok=True)
     return (
         SparkSession.builder
         .appName(app_name)
         .master("local[*]")
         .config("spark.sql.shuffle.partitions", "4")
+        .config("spark.eventLog.enabled", "true")
+        .config("spark.eventLog.dir", EVENTOS_DIR.as_uri())
         .getOrCreate()
     )
 
@@ -117,3 +130,24 @@ def extract_sources(spark: SparkSession, raw_dir: Path = RAW_DIR) -> dict[str, D
         "igae": spark.read.csv(str(rutas["igae"]), header=True, inferSchema=True),
         "inpc": spark.read.csv(str(rutas["inpc"]), header=True, schema=SCHEMA_INPC),
     }
+
+
+# ============================================================
+# 4. ESCRITURA Y LECTURA DE CAPAS (BRONZE / SILVER / GOLD)
+# ============================================================
+def to_bronze(raw_dfs: dict[str, DataFrame]) -> dict[str, DataFrame]:
+    """Bronze = datos crudos sin transformar + trazabilidad (archivo y momento de ingesta)."""
+    return {
+        n: df.withColumn("_archivo_origen", F.input_file_name())
+             .withColumn("_fecha_ingesta", F.current_timestamp())
+        for n, df in raw_dfs.items()
+    }
+
+
+def write_layer(dfs: dict[str, DataFrame], capa_dir: Path) -> None:
+    for nombre, df in dfs.items():
+        df.write.mode("overwrite").parquet(str(capa_dir / nombre))
+
+
+def read_layer(spark: SparkSession, capa_dir: Path, nombres=("shcp", "sat", "igae", "inpc")) -> dict[str, DataFrame]:
+    return {n: spark.read.parquet(str(capa_dir / n)) for n in nombres}
