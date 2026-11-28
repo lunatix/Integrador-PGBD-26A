@@ -52,6 +52,7 @@ flowchart LR
     B --> S[(SILVER<br/>data/silver<br/>1 tabla limpia por fuente<br/>validada: nulos, duplicados, 123 meses)]
     S --> G[(GOLD<br/>data/gold/dataset_maestro<br/>1 fila = 1 mes, 43 columnas<br/>particionado por año)]
     G --> C[Capa de Consumo<br/>Spark SQL + Window + PySpark ML<br/>notebooks/02]
+```
 
 | Capa / Nivel | Código | Qué hace Spark (medido en la Spark UI) |
 | :--- | :--- | :--- |
@@ -95,6 +96,7 @@ Integrador-PGBD-26A/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
